@@ -73,9 +73,24 @@ td, th {
     $akMinPangkat  = $jenjang->ak_min_pangkat ?? 0;
     $akMinJenjang  = $jenjang->ak_min_jenjang ?? 0;
 
-    $kelebihanPangkat = $totalAk - $akMinPangkat;
-    $kekuranganJenjang = $totalAk - $akMinJenjang;
+    //dd($kelebihanPangkat, $kekuranganJenjang);
+    $kelebihanPangkat  = null;
+    $kekuranganPangkat = null;
 
+    if ($totalAk >= $akMinPangkat) {
+        $kelebihanPangkat = ($data->total_ak ?? 0) - $akMinPangkat;
+    } else {
+        $kekuranganPangkat = $akMinPangkat - ($data->total_ak ?? 0);
+    }
+    $kelebihanJenjang  = null;
+    $kekuranganJenjang = null;
+
+    if ($totalAk >= $akMinJenjang) {
+        $kelebihanJenjang = ($data->total_ak ?? 0) - $akMinJenjang;
+    } else {
+        $kekuranganJenjang = $akMinJenjang - ($data->total_ak ?? 0);
+    }
+    //dd($kelebihanPangkat, $kekuranganJenjang);
 @endphp
 
 <div class="header">
@@ -554,7 +569,73 @@ td, th {
         </td>
 
         <td>&nbsp;</td>
+
+    <tr class="center bold">
+        <th colspan="2">Keterangan</th>
+        <th colspan="2">Pangkat</th>
+        <th colspan="2">Jenjang Jabatan</th>
     </tr>
+
+
+    {{-- AK MINIMAL --}}
+    <tr>
+        <td colspan="2">
+            Angka Kredit Minimal yang harus dipenuhi untuk
+            kenaikan pangkat/jenjang
+        </td>
+        <td colspan="2" class="center">
+            {{ number_format($jenjang->ak_min_pangkat, 0, ',', '.') }}
+        </td>
+        <td colspan="2" class="center">
+            {{ number_format($jenjang->ak_min_jenjang, 0, ',', '.') }}
+        </td>
+    </tr>
+
+
+    {{-- KELEBIHAN --}}
+    <tr>
+        <td colspan="2">
+            Kelebihan Angka Kredit yang harus dicapai untuk
+            kenaikan pangkat
+        </td>
+
+        {{-- KOLOM PANGKAT --}}
+        <td colspan="2" class="center">
+            {{ $kelebihanPangkat !== null
+                ? number_format($kelebihanPangkat, 3, ',', '.')
+                : '-' }}
+        </td>
+
+        {{-- KOLOM JENJANG --}}
+        <td colspan="2" class="center">
+            {{ $kelebihanJenjang !== null
+                ? number_format($kelebihanJenjang, 3, ',', '.')
+                : '-' }}
+        </td>
+    </tr>
+
+    {{-- KEKURANGAN --}}
+    <tr>
+        <td colspan="2">
+            Kekurangan Angka Kredit yang harus dicapai
+            untuk kenaikan jenjang
+        </td>
+
+        {{-- KOLOM PANGKAT --}}
+        <td colspan="2" class="center">
+            {{ $kekuranganPangkat !== null
+                ? number_format($kekuranganPangkat, 3, ',', '.')
+                : '-' }}
+        </td>
+
+        {{-- KOLOM JENJANG --}}
+        <td colspan="2" class="center">
+            {{ $kekuranganJenjang !== null
+                ? number_format($kekuranganJenjang, 3, ',', '.')
+                : '-' }}
+        </td>
+    </tr>
+
     <tr class="bold">
             <td colspan="6" class="center">{{U($data->status_hasil)}}</td>
            

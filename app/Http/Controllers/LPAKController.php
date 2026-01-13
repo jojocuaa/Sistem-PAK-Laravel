@@ -383,7 +383,7 @@ class LPAKController extends Controller
             ->get();
         //dd($riwayat);
         $jenjang = DB::table('ak_jenjang_jabatan as h')
-            ->join('pegawai as p', 'p.pangkat', '=', 'h.jenjang_jabatan')
+            ->join('pegawai as p', 'p.jenjang', '=', 'h.jenjang_jabatan')
             ->where('p.nip', $nip)
             ->select('h.*')
             ->first();
@@ -427,7 +427,7 @@ class LPAKController extends Controller
 
             // 🔴 AMBIL AK MINIMAL SESUAI TUJUAN
             $akMinimal = DB::table('ak_jenjang_jabatan')
-                ->where('jenjang_jabatan', $pegawai->jabatan)
+                ->where('jenjang_jabatan', $pegawai->jenjang)
                 ->value(
                     $pak->tujuan_usulan === 'Kenaikan Pangkat'
                         ? 'ak_min_pangkat'
